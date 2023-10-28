@@ -1,0 +1,14 @@
+{
+  "formatter": {
+    "indentStyle": "space",
+    "formatWithErrors": true
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "jsxQuoteStyle": "single",
+      "semicolons": "asNeeded",
+      "trailingComma": "es5"
+    }
+  }
+}
