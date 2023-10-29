@@ -8,7 +8,7 @@ import {
 
 const mysqlTable = mysqlTableCreator((name) => `onezap_${name}`)
 
-export const user = mysqlTable('user', {
+export const users = mysqlTable('users', {
   id: int('id').primaryKey().autoincrement(),
   firstName: varchar('first_name', { length: 100 }),
   lastName: varchar('last_name', { length: 100 }),
@@ -16,7 +16,7 @@ export const user = mysqlTable('user', {
   createdAt: timestamp('created_at').defaultNow(),
 })
 
-export const post = mysqlTable('links', {
+export const links = mysqlTable('links', {
   id: int('id').primaryKey().autoincrement(),
   nanoId: varchar('nid', { length: 12 }),
   title: text('title'),
