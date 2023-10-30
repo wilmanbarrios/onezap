@@ -5,7 +5,7 @@ export const env = createEnv({
   server: {
     DATABASE_URL: z.string().url(),
     CLERK_SECRET_KEY: z.string().min(1),
-    NANOID_HASH_LENGTH: z.number().default(12),
+    CLERK_SIGNING_SECRET: z.string().min(1),
   },
 
   client: {
@@ -27,7 +27,7 @@ export const env = createEnv({
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
     DATABASE_URL: process.env.DATABASE_URL,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
-    NANOID_HASH_LENGTH: process.env.NANOID_HASH_LENGTH,
+    CLERK_SIGNING_SECRET: process.env.CLERK_SIGNING_SECRET,
   },
 
   emptyStringAsUndefined: true,

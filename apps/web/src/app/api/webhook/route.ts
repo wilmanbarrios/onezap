@@ -7,11 +7,11 @@ import { users } from '@/db/schema'
 
 export async function POST(req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
-  const WEBHOOK_SECRET = env.WEBHOOK_SECRET
+  const CLERK_SIGNING_SECRET = env.CLERK_SIGNING_SECRET
 
-  if (!WEBHOOK_SECRET) {
+  if (!CLERK_SIGNING_SECRET) {
     throw new Error(
-      'Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local'
+      'Please add CLERK_SIGNING_SECRET from Clerk Dashboard to .env or .env.local'
     )
   }
 
@@ -33,7 +33,7 @@ export async function POST(req: Request) {
   const body = JSON.stringify(payload)
 
   // Create a new SVIX instance with your secret.
-  const wh = new Webhook(WEBHOOK_SECRET)
+  const wh = new Webhook(CLERK_SIGNING_SECRET)
 
   let evt: UserWebhookEvent
 

@@ -1,8 +1,7 @@
-import { env } from '@/env.mjs'
 import { customAlphabet } from 'nanoid'
 
 const alphabet = '0123456789abcdefghijklmnopqrstuvwxyz'
-const length = env.NANOID_HASH_LENGTH
+const length = 12
 
 const nanoid = customAlphabet(alphabet, length)
 
