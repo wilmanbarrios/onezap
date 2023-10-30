@@ -4,6 +4,7 @@ import { UserJSON, UserWebhookEvent } from '@clerk/nextjs/server'
 import { env } from '@/env.mjs'
 import { db } from '@/db'
 import { users } from '@/db/schema'
+import { sql } from 'drizzle-orm'
 
 export async function POST(req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
@@ -54,12 +55,15 @@ export async function POST(req: Request) {
   // Get the ID and type
   const userData = evt.data as UserJSON
 
-  await db.insert(users).values({
-    firstName: userData.first_name,
-    lastName: userData.last_name,
-    email: userData.email_addresses.shift()?.email_address,
-    createdAt: new Date(userData.created_at),
-  })
+  await db
+    .insert(users)
+    .values({
+      firstName: userData.first_name,
+      lastName: userData.last_name,
+      email: userData.email_addresses.shift()?.email_address,
+      createdAt: new Date(userData.created_at),
+    })
+    .onDuplicateKeyUpdate({ set: { email: sql`email` } })
 
   console.log(`Webhook with and ID of ${userData.id} and type of ${evt.type}`)
   console.log('Webhook body:', body)
