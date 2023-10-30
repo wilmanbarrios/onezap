@@ -20,7 +20,7 @@ export const links = mysqlTable('links', {
   id: int('id').primaryKey().autoincrement(),
   nanoId: varchar('nid', { length: 12 }),
   title: text('title'),
-  url: int('url'),
+  url: text('url'),
   favIconUrl: text('fav_icon_url'),
   userId: int('user_id'),
   group: varchar('group', { length: 12 }),

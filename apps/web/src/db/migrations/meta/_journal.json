@@ -15,6 +15,13 @@
       "when": 1698622519637,
       "tag": "0001_woozy_hercules",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1698669152184,
+      "tag": "0002_milky_jocasta",
+      "breakpoints": true
     }
   ]
 }
