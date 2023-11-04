@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev -- --turbo",
+    "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "db:generate": "cd apps/web && drizzle-kit generate:mysql",
