@@ -31,8 +31,8 @@
   },
   "devDependencies": {
     "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@types/react": "^18.2.35",
+    "@types/react-dom": "^18.2.14",
     "autoprefixer": "^10",
     "drizzle-kit": "^0.19.13",
     "eslint": "^8",
