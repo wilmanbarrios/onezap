@@ -8,7 +8,8 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "db:generate": "cd apps/web && drizzle-kit generate:mysql",
-    "db:push": "cd apps/web && drizzle-kit push:mysql"
+    "db:push": "cd apps/web && drizzle-kit push:mysql",
+    "shadcn-ui": "cd apps/web && npx shadcn-ui@latest"
   },
   "workspaces": [
     "apps/*"
