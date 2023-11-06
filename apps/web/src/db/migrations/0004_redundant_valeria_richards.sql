@@ -1,0 +1,1 @@
+ALTER TABLE `onezap_links` MODIFY COLUMN `user_id` varchar(255);

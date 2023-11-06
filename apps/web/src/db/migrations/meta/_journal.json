@@ -22,6 +22,27 @@
       "when": 1698669152184,
       "tag": "0002_milky_jocasta",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1699143597317,
+      "tag": "0003_plain_famine",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1699222602947,
+      "tag": "0004_redundant_valeria_richards",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1699224133779,
+      "tag": "0005_last_killmonger",
+      "breakpoints": true
     }
   ]
 }

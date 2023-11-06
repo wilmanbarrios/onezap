@@ -1,0 +1,1 @@
+ALTER TABLE `onezap_links` MODIFY COLUMN `nid` varchar(12) NOT NULL;

@@ -8,6 +8,7 @@ import {
 
 const mysqlTable = mysqlTableCreator((name) => `onezap_${name}`)
 
+// TODO: remove this table, I don't need this anymore
 export const users = mysqlTable('users', {
   id: int('id').primaryKey().autoincrement(),
   firstName: varchar('first_name', { length: 100 }),
@@ -18,12 +19,12 @@ export const users = mysqlTable('users', {
 
 export const links = mysqlTable('links', {
   id: int('id').primaryKey().autoincrement(),
-  nanoId: varchar('nid', { length: 12 }),
+  nanoId: varchar('nid', { length: 12 }).notNull(),
   title: text('title'),
   description: text('description'),
   url: text('url'),
   favIconUrl: text('fav_icon_url'),
-  userId: int('user_id'),
+  userId: varchar('user_id', { length: 255 }),
   group: varchar('group', { length: 12 }),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at'),
