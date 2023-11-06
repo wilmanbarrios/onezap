@@ -5,8 +5,9 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { fetchLinks } from '@/db/queries/links'
 import { ClerkLoaded, ClerkLoading, UserButton } from '@clerk/nextjs'
 import { currentUser } from '@clerk/nextjs/server'
-import Link from 'next/link'
 import { X } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
 
 export default async function Home() {
   const user = await currentUser()
@@ -92,11 +93,10 @@ export default async function Home() {
                 <div className='flex items-center justify-start'>
                   <div className='relative w-4 h-4 mr-4'>
                     {item.favIconUrl ? (
-                      <img
+                      <Image
                         src={item.favIconUrl}
                         alt={item.title || 'site icon'}
-                        width={16}
-                        height={16}
+                        fill={true}
                       />
                     ) : (
                       <Skeleton className='w-full h-full rounded-full' />
