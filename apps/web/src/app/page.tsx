@@ -102,11 +102,7 @@ export default async function Home() {
                       <Skeleton className='w-full h-full rounded-full' />
                     )}
                   </div>
-                  {item.title ? (
-                    <div>{item.title}</div>
-                  ) : (
-                    <Skeleton className='h-4 w-72' />
-                  )}
+                  <div>{item.title || item.url}</div>
                   <div className='hidden group-hover:block ml-2'>
                     <form action={manageItem} className='flex'>
                       <input type='hidden' name='linkId' value={item.nanoId} />
