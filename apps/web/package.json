@@ -16,9 +16,11 @@
     "drizzle-orm": "^0.28.6",
     "nanoid": "^3.3.6",
     "next": "14.0.0",
+    "node-html-parser": "^6.1.11",
     "react": "^18",
     "react-dom": "^18",
     "svix": "^1.13.0",
+    "undici": "^5.27.2",
     "zod": "^3.22.4"
   },
   "devDependencies": {
