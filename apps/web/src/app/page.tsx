@@ -1,17 +1,21 @@
 import { createLink, deleteLink } from '@/actions/links'
+import FavIcon from '@/components/fav-icon'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Skeleton } from '@/components/ui/skeleton'
 import { fetchLinks } from '@/db/queries/links'
-import { ClerkLoaded, ClerkLoading, UserButton } from '@clerk/nextjs'
 import { currentUser } from '@clerk/nextjs/server'
 import { X } from 'lucide-react'
-import Image from 'next/image'
-import Link from 'next/link'
 
-export default async function Home() {
+type SearchParams = {
+  searchParams: {
+    search?: string
+  }
+}
+
+export default async function Home({ searchParams }: SearchParams) {
+  const { search } = searchParams
   const user = await currentUser()
-  const items = await fetchLinks(user?.id)
+  const items = await fetchLinks(user?.id, search)
 
   async function manageItem(formData: FormData) {
     'use server'
@@ -31,92 +35,40 @@ export default async function Home() {
   }
 
   return (
-    <div>
-      <header className='flex items-center justify-between px-5 py-6 border-b border-black/5'>
-        <Link href='/' className='text-2xl font-extralight'>
-          ⚡<span className='italic'>One</span>Zap
-        </Link>
+    <main className='px-5 pt-5'>
+      <section>
+        <form
+          action={createLink}
+          className='flex items-center justify-start w-[400px]'
+        >
+          <Input type='text' name='url' placeholder='URL...' />
+          <Button type='submit' className='ml-4'>
+            Add
+          </Button>
+        </form>
 
-        <nav>
-          <ul className='flex items-center justify-between space-x-4'>
-            {user ? (
-              <>
-                <li>
-                  <Input
-                    type='search'
-                    placeholder='Search...'
-                    className='w-72'
-                  />
-                </li>
-                <li className='w-8 h-8'>
-                  <ClerkLoading>
-                    <Skeleton className='w-full h-full rounded-full' />
-                  </ClerkLoading>
-                  <ClerkLoaded>
-                    <UserButton afterSignOutUrl='/' />
-                  </ClerkLoaded>
-                </li>
-              </>
-            ) : (
-              <>
-                <li>
-                  <Button asChild>
-                    <Link href='/sign-in'>Sign in</Link>
-                  </Button>
-                </li>
-                <li>
-                  <Button asChild variant='ghost'>
-                    <Link href='/sign-up'>Sign up</Link>
-                  </Button>
-                </li>
-              </>
-            )}
-          </ul>
-        </nav>
-      </header>
-
-      <main className='px-5 pt-5'>
-        <section>
-          <form
-            action={createLink}
-            className='flex items-center justify-start w-[400px]'
-          >
-            <Input type='text' name='url' placeholder='URL...' />
-            <Button type='submit' className='ml-4'>
-              Add
-            </Button>
-          </form>
-
-          <ul className='mt-5 text-sm space-y-1'>
-            {items.map((item) => (
-              <li key={item.nanoId} className='group'>
-                <div className='flex items-center justify-start'>
-                  <div className='relative w-4 h-4 mr-4'>
-                    {item.favIconUrl ? (
-                      <Image
-                        src={item.favIconUrl}
-                        alt={item.title || 'site icon'}
-                        fill={true}
-                      />
-                    ) : (
-                      <Skeleton className='w-full h-full rounded-full' />
-                    )}
-                  </div>
-                  <div>{item.title || item.url}</div>
-                  <div className='hidden group-hover:block ml-2'>
-                    <form action={manageItem} className='flex'>
-                      <input type='hidden' name='linkId' value={item.nanoId} />
-                      <button type='submit' name='intent' value='delete-link'>
-                        <X className='w-4 h-4' />
-                      </button>
-                    </form>
-                  </div>
+        <ul className='mt-5 text-sm space-y-1'>
+          {items.map((item) => (
+            <li key={item.nanoId} className='group'>
+              <div className='flex items-center justify-start'>
+                <FavIcon
+                  url={item.favIconUrl}
+                  alt={item.title || 'site icon'}
+                />
+                <div>{item.title || item.url}</div>
+                <div className='hidden group-hover:block ml-2'>
+                  <form action={manageItem} className='flex'>
+                    <input type='hidden' name='linkId' value={item.nanoId} />
+                    <button type='submit' name='intent' value='delete-link'>
+                      <X className='w-4 h-4' />
+                    </button>
+                  </form>
                 </div>
-              </li>
-            ))}
-          </ul>
-        </section>
-      </main>
-    </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </main>
   )
 }

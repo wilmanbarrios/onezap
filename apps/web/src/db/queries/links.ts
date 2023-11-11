@@ -1,10 +1,20 @@
-import { desc, eq } from 'drizzle-orm'
+import { SQL, and, desc, eq, like } from 'drizzle-orm'
 import { db } from '..'
 import { links } from '../schema'
 
-export async function fetchLinks(userId?: string) {
+export async function fetchLinks(userId?: string, search?: string) {
   if (!userId) {
     return Promise.resolve([])
+  }
+  const condition: SQL[] = []
+
+  // TODO: I probably need to add an index to this to make it faster
+  condition.push(eq(links.userId, userId))
+
+  if (search?.length) {
+    // TODO: this needs to be able to filter in a case insensitive
+    // TODO: I probably need to add an index to this to make it faster
+    condition.push(like(links.url, `%${search}%`))
   }
 
   return await db
@@ -17,6 +27,6 @@ export async function fetchLinks(userId?: string) {
       createdAt: links.createdAt,
     })
     .from(links)
-    .where(eq(links.userId, userId))
+    .where(and(...condition))
     .orderBy(desc(links.createdAt))
 }
