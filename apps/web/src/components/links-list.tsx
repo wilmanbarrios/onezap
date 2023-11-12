@@ -11,8 +11,19 @@ import { diffForHumans } from '@/utils/dates'
 
 type OptimisticLink = Link & {
   optimistic: boolean
-  action: 'create' | 'delete'
 }
+
+type CreateAction = {
+  action: 'create'
+  url: string
+}
+
+type DeleteAction = {
+  action: 'delete'
+  nanoId: string
+}
+
+type OptimisticItemsReducer = CreateAction | DeleteAction
 
 type LinkListProps = {
   items: OptimisticLink[]
@@ -21,17 +32,29 @@ type LinkListProps = {
 export default function LinkList({ items }: LinkListProps) {
   const [optimisticItems, addOptimisticItem] = useOptimistic<
     OptimisticLink[],
-    { newItem?: string; id?: string; action: OptimisticLink['action'] }
-  >(items, (state, { newItem, id, action }) => {
-    switch (action) {
+    OptimisticItemsReducer
+  >(items, (state, reducer) => {
+    switch (reducer.action) {
       case 'create': {
         return [
-          { nanoId: Date.now(), url: newItem, optimistic: true },
+          {
+            id: Date.now(),
+            nanoId: Date.now().toString(),
+            title: null,
+            description: null,
+            url: reducer.url,
+            favIconUrl: null,
+            userId: null,
+            group: null,
+            createdAt: new Date(),
+            updatedAt: null,
+            optimistic: true,
+          },
           ...state,
         ]
       }
       case 'delete': {
-        return state.filter((item) => item.nanoId !== id)
+        return state.filter((item) => item.nanoId !== reducer.nanoId)
       }
     }
   })
@@ -47,7 +70,7 @@ export default function LinkList({ items }: LinkListProps) {
       return { ok: false, message: 'No link provided!' }
     }
 
-    addOptimisticItem({ newItem: url, action: 'create' })
+    addOptimisticItem({ url, action: 'create' })
     formRef.current?.reset()
 
     await createLink(url)
@@ -60,7 +83,7 @@ export default function LinkList({ items }: LinkListProps) {
       return { ok: false, message: 'No link provided!' }
     }
 
-    addOptimisticItem({ id: linkId, action: 'delete' })
+    addOptimisticItem({ nanoId: linkId, action: 'delete' })
 
     await deleteLink(linkId)
   }
