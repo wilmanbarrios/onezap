@@ -10,7 +10,6 @@ import {
 import './globals.css'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
 import Search from '@/components/search'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
@@ -28,10 +27,6 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   const user = await currentUser()
-
-  if (!user) {
-    redirect('/sign-in')
-  }
 
   return (
     <html lang='en'>
