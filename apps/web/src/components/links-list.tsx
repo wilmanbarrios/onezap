@@ -9,8 +9,11 @@ import { Input } from './ui/input'
 import { Button } from './ui/button'
 import { diffForHumans } from '@/utils/dates'
 
-type OptimisticLink = Link & {
-  optimistic: boolean
+type OptimisticLink = Pick<
+  Link,
+  'nanoId' | 'url' | 'title' | 'description' | 'favIconUrl' | 'createdAt'
+> & {
+  optimistic?: boolean
 }
 
 type CreateAction = {
