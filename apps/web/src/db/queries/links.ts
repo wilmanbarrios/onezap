@@ -30,3 +30,10 @@ export async function fetchLinks(userId?: string, search?: string) {
     .where(and(...condition))
     .orderBy(desc(links.createdAt))
 }
+
+async function link() {
+  const link = await db.select().from(links).limit(1)
+  return link[0]
+}
+
+export type Link = Awaited<ReturnType<typeof link>>

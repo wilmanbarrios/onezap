@@ -11,16 +11,26 @@ export async function extractSEO(url: string) {
 
   const root = parse(html)
 
-  const title = root.querySelectorAll('title').pop()?.text
-  const description = root
-    .querySelector('meta[name=description]')
+  const title = root
+    .querySelector('meta[property="og:title"]')
     ?.getAttribute('content')
-  let favIconUrl = root.querySelector('link[rel=icon]')?.getAttribute('href')
+  const description = root
+    .querySelector('meta[property="og:description"]')
+    ?.getAttribute('content')
 
-  if (favIconUrl && !favIconUrl?.startsWith('http')) {
-    const urlObject = new URL(url)
-    favIconUrl = urlObject.origin.concat(favIconUrl)
+  const urlObject = new URL(url)
+
+  let icon = root.querySelector('link[rel=icon]')?.getAttribute('href')
+  if (icon?.startsWith('/.')) {
+    icon = icon.replace('/.', urlObject.origin)
+  } else if (icon?.startsWith('/')) {
+    icon = urlObject.origin.concat(icon)
   }
+
+  const favIconUrl =
+    icon || `https://icons.duckduckgo.com/ip3/${urlObject.hostname}.ico`
+
+  console.log({ favIconUrl })
 
   return {
     title,

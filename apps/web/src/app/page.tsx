@@ -1,10 +1,7 @@
-import { createLink, deleteLink } from '@/actions/links'
-import FavIcon from '@/components/fav-icon'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { deleteLink } from '@/actions/links'
+import LinkList from '@/components/links-list'
 import { fetchLinks } from '@/db/queries/links'
 import { currentUser } from '@clerk/nextjs/server'
-import { X } from 'lucide-react'
 
 type SearchParams = {
   searchParams: {
@@ -35,40 +32,8 @@ export default async function Home({ searchParams }: SearchParams) {
   }
 
   return (
-    <main className='px-5 pt-5'>
-      <section>
-        <form
-          action={createLink}
-          className='flex items-center justify-start w-[400px]'
-        >
-          <Input type='text' name='url' placeholder='URL...' />
-          <Button type='submit' className='ml-4'>
-            Add
-          </Button>
-        </form>
-
-        <ul className='mt-5 text-sm space-y-1'>
-          {items.map((item) => (
-            <li key={item.nanoId} className='group'>
-              <div className='flex items-center justify-start'>
-                <FavIcon
-                  url={item.favIconUrl}
-                  alt={item.title || 'site icon'}
-                />
-                <div>{item.title || item.url}</div>
-                <div className='hidden group-hover:block ml-2'>
-                  <form action={manageItem} className='flex'>
-                    <input type='hidden' name='linkId' value={item.nanoId} />
-                    <button type='submit' name='intent' value='delete-link'>
-                      <X className='w-4 h-4' />
-                    </button>
-                  </form>
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </section>
+    <main className='px-5 py-6'>
+      <LinkList items={items} />
     </main>
   )
 }

@@ -9,14 +9,14 @@ import { currentUser } from '@clerk/nextjs'
 import { eq } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 
-export async function createLink(formData: FormData) {
+export async function createLink(item: string) {
   const user = await currentUser()
   if (!user) {
     return { ok: false, message: 'Not user found!' }
   }
 
   const { url } = createLinkSchema.parse({
-    url: formData.get('url'),
+    url: item,
   })
 
   const seo = await extractSEO(url)

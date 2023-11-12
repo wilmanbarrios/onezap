@@ -22,10 +22,10 @@ export const links = mysqlTable('links', {
   nanoId: varchar('nid', { length: 12 }).notNull(),
   title: text('title'),
   description: text('description'),
-  url: text('url'),
+  url: text('url').notNull(),
   favIconUrl: text('fav_icon_url'),
   userId: varchar('user_id', { length: 255 }),
   group: varchar('group', { length: 12 }),
-  createdAt: timestamp('created_at').defaultNow(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at'),
 })

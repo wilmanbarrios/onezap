@@ -34,15 +34,15 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang='en' className='bg-black'>
+    <html lang='en'>
       <ClerkProvider>
         <body
           className={cn(
             inter.className,
-            'max-w-6xl mx-auto min-h-screen bg-white'
+            'max-w-6xl mx-auto min-h-screen relative'
           )}
         >
-          <header className='flex items-center justify-between px-5 py-6 border-b border-black/5'>
+          <header className='sticky z-50 top-0 inset-x-0 flex items-center justify-between px-5 py-6 border-b border-black/5 bg-white'>
             <Link href='/' className='text-2xl font-extralight'>
               ⚡<span className='italic'>One</span>Zap
             </Link>
