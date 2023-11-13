@@ -1,13 +1,14 @@
 'use client'
 
 import { Link } from '@/db/queries/links'
-import { useOptimistic, useRef } from 'react'
+import { useMemo, useOptimistic, useRef } from 'react'
 import FavIcon from './fav-icon'
-import { Loader, Plus, X } from 'lucide-react'
+import { Hourglass, Link as LinkIcon, Loader, X } from 'lucide-react'
 import { createLink, deleteLink } from '@/actions/links'
 import { Input } from './ui/input'
-import { Button } from './ui/button'
 import { diffForHumans } from '@/utils/dates'
+import groupBy from 'lodash.groupby'
+import { format, isToday } from 'date-fns'
 
 type OptimisticLink = Pick<
   Link,
@@ -62,6 +63,13 @@ export default function LinkList({ items }: LinkListProps) {
     }
   })
   const formRef = useRef<HTMLFormElement>(null)
+  const itemsGrouped = useMemo(() => {
+    const grouping = groupBy(optimisticItems, (item) =>
+      format(item.createdAt, 'yyyy-MM-dd')
+    )
+    return Object.entries(grouping).map(([, v]) => v)
+  }, [optimisticItems])
+
   const lastItem = optimisticItems[0].optimistic
     ? optimisticItems[1]
     : optimisticItems[0]
@@ -93,58 +101,83 @@ export default function LinkList({ items }: LinkListProps) {
 
   return (
     <section>
+      <div className='flex items-baseline justify-start font-extralight text-2xl mb-6'>
+        <p className=''>{optimisticItems.length} zaps</p>
+        {!isToday(lastItem.createdAt) ? (
+          <>
+            <p className='text-sm ml-4 mr-1'>last added</p>
+            <time
+              className='text-sm'
+              dateTime={lastItem.createdAt.toISOString()}
+            >
+              {diffForHumans(lastItem.createdAt)}
+            </time>
+          </>
+        ) : null}
+      </div>
+
       <form
         ref={formRef}
         action={handleCreate}
         className='flex w-full items-center space-x-2'
       >
-        <Input type='text' name='url' placeholder='URL...' />
-        <Button type='submit' className='ml-4'>
-          <Plus className='mr-2 h-4 w-4' /> Add
-        </Button>
+        <Input type='text' name='url' placeholder='Add URL...' />
       </form>
 
-      <div className='mt-5 text-zinc-500 flex items-baseline justify-start '>
-        <p className='text-lg font-light'>{optimisticItems.length} links</p>
-        <p className='text-sm ml-4 mr-1'>last modified</p>
-        <time className='text-sm' dateTime={lastItem.createdAt.toISOString()}>
-          {diffForHumans(lastItem.createdAt)}
-        </time>
-      </div>
-
-      <ul className='mt-2 text-sm space-y-1.5'>
-        {optimisticItems.map((item) => (
-          <li key={item.nanoId} className='group'>
-            <div className='flex items-center justify-start'>
-              <div className='relative inline-flex items-center w-5 h-5 mx-1'>
-                {item.optimistic ? (
-                  <Loader className='animate-spin absolute w-full h-full' />
-                ) : (
-                  <FavIcon
-                    url={item.favIconUrl}
-                    alt={item.title || 'site icon'}
-                  />
-                )}
+      <div className='text-sm'>
+        {itemsGrouped.map((group, index) => (
+          <div key={index} className='mt-5'>
+            <div className='flex align-baseline font-extralight text-lg justify-start space-x-2'>
+              <div className='ml-1.5 inline-flex items-center mr-1'>
+                <LinkIcon className='w-4 h-4 mr-1.5' />
+                <p>{group.length} links</p>
               </div>
-              <a
-                href={item.url}
-                target='_blank'
-                referrerPolicy='no-referrer'
-                className='truncate ml-3 w-full h-5'
-              >
-                <span>{item.title || item.url}</span>{' '}
-              </a>
-              <div className='invisible group-hover:visible mx-1'>
-                <form action={handleDelete} className='flex'>
-                  <button type='submit' name='linkId' value={item.nanoId}>
-                    <X className='w-5 h-5 text-black/60' />
-                  </button>
-                </form>
+              <div className='flex items-center text-base'>
+                <Hourglass className='w-4 h-4 mr-1.5 text-zinc-500' />
+                <time
+                  className='lowercase'
+                  dateTime={group[0].createdAt.toISOString()}
+                >
+                  {diffForHumans(group[0].createdAt)}
+                </time>
               </div>
             </div>
-          </li>
+            <ul className='mt-2 space-y-1.5'>
+              {group.map((item) => (
+                <li key={item.nanoId} className='group'>
+                  <div className='flex'>
+                    <div className='relative inline-flex items-center w-5 h-5 mx-1'>
+                      {item.optimistic ? (
+                        <Loader className='animate-spin absolute w-full h-full' />
+                      ) : (
+                        <FavIcon
+                          url={item.favIconUrl}
+                          alt={item.title || 'site icon'}
+                        />
+                      )}
+                    </div>
+                    <a
+                      href={item.url}
+                      target='_blank'
+                      referrerPolicy='no-referrer'
+                      className='ml-3 w-full h-5 truncate'
+                    >
+                      {item.title || item.url}
+                    </a>
+                    <div className='invisible group-hover:visible mx-1'>
+                      <form action={handleDelete} className='flex'>
+                        <button type='submit' name='linkId' value={item.nanoId}>
+                          <X className='w-5 h-5 text-black/60' />
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         ))}
-      </ul>
+      </div>
     </section>
   )
 }
