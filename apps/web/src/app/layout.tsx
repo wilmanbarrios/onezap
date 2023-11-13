@@ -37,7 +37,7 @@ export default async function RootLayout({
             'max-w-6xl mx-auto min-h-screen relative'
           )}
         >
-          <header className='sticky z-50 top-0 inset-x-0 flex items-center justify-between px-5 py-6 border-b border-black/5 bg-white'>
+          <header className='sticky z-50 top-0 inset-x-0 flex items-center justify-between px-5 py-6 bg-white'>
             <Link href='/' className='text-2xl font-extralight'>
               ⚡<span className='italic'>One</span>Zap
             </Link>

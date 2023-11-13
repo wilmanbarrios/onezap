@@ -130,7 +130,7 @@ export default function LinkList({ items }: LinkListProps) {
             <div className='flex align-baseline font-extralight text-lg justify-start space-x-2'>
               <div className='ml-1.5 inline-flex items-center mr-1'>
                 <LinkIcon className='w-4 h-4 mr-1.5' />
-                <p>{group.length} links</p>
+                <p>{group.length} zaps</p>
               </div>
               <div className='flex items-center text-base'>
                 <Hourglass className='w-4 h-4 mr-1.5 text-zinc-500' />
