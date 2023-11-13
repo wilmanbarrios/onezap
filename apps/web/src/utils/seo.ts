@@ -30,8 +30,6 @@ export async function extractSEO(url: string) {
   const favIconUrl =
     icon || `https://icons.duckduckgo.com/ip3/${urlObject.hostname}.ico`
 
-  console.log({ favIconUrl })
-
   return {
     title,
     description,
