@@ -70,7 +70,7 @@ export default function LinkList({ items }: LinkListProps) {
     return Object.entries(grouping).map(([, v]) => v)
   }, [optimisticItems])
 
-  const lastItem = optimisticItems[0].optimistic
+  const lastItem = optimisticItems[0]?.optimistic
     ? optimisticItems[1]
     : optimisticItems[0]
 
@@ -147,7 +147,7 @@ export default function LinkList({ items }: LinkListProps) {
                 <li key={item.nanoId} className='group'>
                   <div className='flex'>
                     <div className='relative inline-flex items-center w-5 h-5 mx-1'>
-                      {item.optimistic ? (
+                      {item?.optimistic ? (
                         <Loader className='animate-spin absolute w-full h-full' />
                       ) : (
                         <FavIcon
